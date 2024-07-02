@@ -30,7 +30,7 @@ app.use((req, res, next) => {
 app.get("/api/hello", (req, res) => {
   const visitorIp = req.visitorIp;
 
-  const geo = geoip.lookup(visitorIp);
+  let geo = geoip.lookup(visitorIp);
   let city = geo?.city;
 
   const visitorsName = req.query.visitors_name
