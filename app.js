@@ -1,5 +1,6 @@
 const path = require("path");
 const express = require("express");
+var geoip = require("geoip-lite");
 
 const cors = require("cors");
 
@@ -28,6 +29,9 @@ app.use((req, res, next) => {
 app.get("/api/hello", (req, res) => {
   const visitorIp = req.visitorIp;
 
+  const geo = geoip.lookup(visitorIp);
+  let city = geo.city;
+
   const visitorsName = req.query.visitors_name
     ? req.query.visitors_name
     : "Visitor";
@@ -36,8 +40,8 @@ app.get("/api/hello", (req, res) => {
     status: "success",
     data: {
       client_ip: visitorIp, // The IP address of the requester
-      location: `Bida`, // The city of the requester
-      greeting: `Hello, ${visitorsName}!, the temperature is 11 degrees Celcius in Bida`,
+      location: city, // The city of the requester
+      greeting: `Hello, ${visitorsName}!, the temperature is 11 degrees Celcius in ${city}`,
     },
   });
 });
