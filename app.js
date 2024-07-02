@@ -31,7 +31,7 @@ app.get("/api/hello", (req, res) => {
   const visitorIp = req.visitorIp;
 
   let geo = geoip.lookup(visitorIp);
-  let city = geo?.city;
+  let city = geo?.city ? geo?.city : `can't find the city`;
 
   const visitorsName = req.query.visitors_name
     ? req.query.visitors_name
@@ -41,8 +41,8 @@ app.get("/api/hello", (req, res) => {
     status: "success",
     data: {
       client_ip: visitorIp, // The IP address of the requester
-      location: "city", // The city of the requester
-      greeting: `Hello, ${visitorsName}!, the temperature is 11 degrees Celcius in `,
+      location: city, // The city of the requester
+      greeting: `Hello, ${visitorsName}!, the temperature is 11 degrees Celcius in ${city}`,
     },
   });
 });
