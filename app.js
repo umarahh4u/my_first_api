@@ -20,8 +20,12 @@ app.listen(port, () => {
 // server.listen
 
 app.use((req, res, next) => {
-  req.visitorIp =
-    req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+  req.visitorIp = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+
+  const city = geoip.lookup(req.visitorIp);
+
+  req.visitor_city = city.city;
+
   next();
 });
 
@@ -35,8 +39,8 @@ app.get("/api/hello", (req, res) => {
     status: "success",
     data: {
       client_ip: visitors_ip, // The IP address of the requester
-      location: `Bida`, // The city of the requester
-      greeting: `Hello, ${visitorsName}!, the temperature is 11 degrees Celcius in Bida`,
+      location: req.visitor_city, // The city of the requester
+      greeting: `Hello, ${visitorsName}!, the temperature is 11 degrees Celcius in ${req.visitor_city}`,
     },
   });
 });
