@@ -20,14 +20,18 @@ app.listen(port, () => {
 
 // server.listen
 
-app.get("/api/hello/:visitor_name", (req, res) => {
+app.get("/api/hello", (req, res) => {
   let ip = req.socket.remoteAddress || req.headers["x-forwarded-for"];
+  const visitorsName = req.query.visitors_name
+    ? req.query.visitors_name
+    : "Visitor";
+
   res.status(200).json({
     status: "success",
     data: {
       client_ip: ip, // The IP address of the requester
-      location: `New York`, // The city of the requester
-      greeting: `Hello, ${req.params.visitor_name}!, the temperature is 11 degrees Celcius in New York`,
+      location: `Bida`, // The city of the requester
+      greeting: `Hello, ${visitorsName}!, the temperature is 11 degrees Celcius in Bida`,
     },
   });
 });
